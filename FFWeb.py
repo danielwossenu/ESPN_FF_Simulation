@@ -1,21 +1,13 @@
-import csv
 import numpy as np
 import operator
-import urllib2
-import FFScrap
-import timeit
 import ffapi
 
+#initialize wins dictionary and playoffs list
 wins = dict()
 playoffs = []
 
-start = timeit.timeit()
-league_number = 223274
-response = urllib2.urlopen("http://games.espn.com/ffl/schedule?leagueId=223275")
-source = response.read()
-end = timeit.timeit()
-
-print end-start
+# league id from ESPN
+league_number = 223275
 
 # the first week to start simulating
 sim_start = 13
@@ -23,13 +15,12 @@ sim_start = 13
 # number of simulations
 trials = 1000.0
 
-#create schedule from webpage
-# mylist = FFScrap.get_schedule(source)
-mylist = ffapi.get_sim_schedule(223275, 2016)
-print mylist
+# create schedule from webpage
+schedule = ffapi.get_sim_schedule(league_number, 2016)
+
 # create a list of strings that are the team names
 teams_ls=[]
-for game in mylist:
+for game in schedule:
     if game[4] == "1" or game[4] == 1:
         team1 = game[0]
         team2 = game[1]
@@ -45,32 +36,24 @@ for game in mylist:
         break
 
 
-#initialize dictionary the value is (wins, [game scores], mean, stddev, playoffs %)
+# initialize dictionary the value is (wins, [game scores], mean, stddev, playoffs %)
 for x in teams_ls:
     wins[x] = [0, [], 0, 0, 0]
 
-# # read CSV file
-# with open("C:\Users\Daniel\Google Drive\Programming\RandomProjects\FantasySimCSV.csv", 'rb') as f:
-#     reader = csv.reader(f)
-#     next(reader, None)
-#     mylist = list(reader)
-
-
-
-
-# Turn number strings to int in mylist for both game scores and the week number
-for game in mylist:
-    game[2] = int(game[2])
-    game[3] = int(game[3])
-    game[4] = int(game[4])
+# Turn number strings to int in schedule for both game scores and the week number
+# for game in schedule:
+#     game[2] = int(game[2])
+#     game[3] = int(game[3])
+#     game[4] = int(game[4])
 
 # assign wins to each team in "wins" dictionary
 def assign_wins():
-    for game in mylist:
+    for game in schedule:
         if game[2] != 0:
             if game[2] > game[3]:
                 wins[game[0]][0] += 1
             elif game[2] == game[3]:
+                # if matchup tiebreaker = none
                 wins[game[0]][0] += .5
                 wins[game[1]][0] += .5
             elif game[2] < game[3]:
@@ -110,22 +93,18 @@ def reset_wins():
         wins[y][0] = 0
         wins[y][1] = []
 
-
-
-# for sim in range(1,trials,1):
-#     print "a"
 assign_wins()
 calc_mean_stddev()
 reset_wins()
 
 
 for sim in range (1,int(trials+1),1):
-    for num, game in enumerate(mylist[(6*(sim_start-1)):]):
+    for num, game in enumerate(schedule[(6*(sim_start-1)):]):
         #assign score from random number based on normal dist with mean and st dev
-        # mylist[53 + num][2] = int(np.random.normal(wins[game[0]][2], wins[game[0]][3]))
-        # mylist[53 + num][3] = int(np.random.normal(wins[game[1]][2], wins[game[1]][3]))
-        mylist[6*(sim_start-1) + num][2] = int(np.random.normal(90, 10))
-        mylist[6*(sim_start-1) + num][3] = int(np.random.normal(90, 10))
+        # schedule[53 + num][2] = int(np.random.normal(wins[game[0]][2], wins[game[0]][3]))
+        # schedule[53 + num][3] = int(np.random.normal(wins[game[1]][2], wins[game[1]][3]))
+        schedule[6*(sim_start-1) + num][2] = int(np.random.normal(90, 10))
+        schedule[6*(sim_start-1) + num][3] = int(np.random.normal(90, 10))
 
     assign_wins()
     calc_playoffs()
@@ -141,4 +120,3 @@ for sim in range (1,int(trials+1),1):
 for each in wins:
     print each, wins[each][4]*100
 
-# print wins
