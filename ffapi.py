@@ -67,5 +67,3 @@ class EspnFflClient:
 
 
 _fetch_league()
-
-print leag.status

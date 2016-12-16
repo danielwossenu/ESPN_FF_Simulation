@@ -19,6 +19,7 @@ def simulate(league_number, year):
     # create schedule from webpage
     # schedule = ffapi.get_sim_schedule(league_number, 2016)
     league = League(league_number, year)
+    po_team_count = league.settings.playoff_team_count
     schedule = []
     for week in range(1, 14):
         for each in league.scoreboard(week):
@@ -83,7 +84,7 @@ def simulate(league_number, year):
 
         # assign share to "wins" for making playoffs in each trial
         eric = 0
-        for x in playoffs[:6]:
+        for x in playoffs[:po_team_count]:
             wins[x[0]][4] += (1/trials)
         #     if x[0] == "Eric Wilson":
         #         eric =1
@@ -106,6 +107,7 @@ def simulate(league_number, year):
 
 
     for sim in range (1,int(trials+1),1):
+        # the number 6 in the next line should be replaced by the # of teams in the league divided by 2
         for num, game in enumerate(schedule[(6*(sim_start-1)):]):
             #assign score from random number based on normal dist with mean and st dev
             # schedule[53 + num][2] = int(np.random.normal(wins[game[0]][2], wins[game[0]][3]))
@@ -130,9 +132,7 @@ def simulate(league_number, year):
         results.append([each, wins[each][4]*100])
     return results
 
-# a = simulate(223275, 2016)
-#
-# for each in a:
-#     print each[0], each[1]
+a = simulate(223275, 2016)
 
-
+for each in a:
+    print each[0], each[1]
