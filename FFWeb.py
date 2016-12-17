@@ -2,6 +2,10 @@ import numpy as np
 import operator
 from espnff import League
 
+# my league 223275 (12 team, 1 division, 6 playoffs teams)
+# league 2223273 (10 teams, 2 divisions, 4 playoff teams)
+
+
 def simulate(league_number, year):
     #initialize wins dictionary and playoffs list
     wins = dict()
@@ -16,12 +20,20 @@ def simulate(league_number, year):
     # number of simulations
     trials = 1000.0
 
-    # create schedule from webpage
-    # schedule = ffapi.get_sim_schedule(league_number, 2016)
+    # create League object from espnff package
     league = League(league_number, year)
+
+    # assign relevant information to variables
+    team_count = league.settings.team_count
+    playoff_tiebreaker = league.settings.playoff_seed_tie_rule
+    matchup_tiebreaker = league.settings.tie_rule
     po_team_count = league.settings.playoff_team_count
+    reg_weeks = league.settings.reg_season_count
+
+
+    #create schedule
     schedule = []
-    for week in range(1, 14):
+    for week in range(1, reg_weeks+1):
         for each in league.scoreboard(week):
             schedule.append(
                 [str(each.home_team.owner), str(each.away_team.owner), each.home_score, each.away_score, week])

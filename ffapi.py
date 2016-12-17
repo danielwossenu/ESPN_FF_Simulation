@@ -34,7 +34,7 @@ def _fetch_league():
     # self.status = r.status_code
     data = r.json()
 
-    print data['leaguesettings']['id']
+    print data['leaguesettings']
     # print data['leaguesettings'].keys()
     # for key in data['leaguesettings'].keys():
     #
