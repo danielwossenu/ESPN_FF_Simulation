@@ -60,10 +60,25 @@ class EspnFflClient:
         return r.json()
 
 
-# client = EspnFflClient(460537)
+    def test(self):
+        # url = self.ENDPOINT + 'scoreboard' + '?leagueId=' + str(self.leagueId) +'&scoringPeriodId=13'+'&seasonId=2016'+'&rand=' + self.RAND
+        url = self.ENDPOINT + 'boxscore?leagueId=223275&teamId=13&scoringPeriodId=13&seasonId=2016' + '&rand=' + self.RAND
+
+        r = requests.get(url)
+        return r.json()
+
+    # def test(self):
+    #     url = self.ENDPOINT + 'playerInfo' + '?leagueId=' + str(self.leagueId) + '&rand=' + self.RAND
+    #     r = requests.get(url)
+    #     return r.json()
+
+client = EspnFflClient(223275)
 # print(client.get_recent_activity(20))
 # print(client.get_player_info())
+print client.test()
 
 
+# _fetch_league()
 
-_fetch_league()
+# url = self.ENDPOINT + 'scoreboard' + '?leagueId=' + str(
+#     self.leagueId) + '&scoringPeriodId=13' + '&seasonId=2016' + '&rand=' + self.RAND
