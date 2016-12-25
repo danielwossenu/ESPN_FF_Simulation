@@ -60,10 +60,9 @@ class EspnFflClient:
         return r.json()
 
 
-    def test(self):
+    def test(self,team,week):
         # url = self.ENDPOINT + 'scoreboard' + '?leagueId=' + str(self.leagueId) +'&scoringPeriodId=13'+'&seasonId=2016'+'&rand=' + self.RAND
-        url = self.ENDPOINT + 'boxscore?leagueId=223275&teamId=13&scoringPeriodId=13&seasonId=2016' + '&rand=' + self.RAND
-
+        url = self.ENDPOINT + 'boxscore?leagueId=223275&teamId='+str(team)+'&scoringPeriodId='+str(week)+'&seasonId=2015' + '&rand=' + self.RAND
         r = requests.get(url)
         return r.json()
 
@@ -75,7 +74,7 @@ class EspnFflClient:
 client = EspnFflClient(223275)
 # print(client.get_recent_activity(20))
 # print(client.get_player_info())
-print client.test()
+print client.test(13,13)
 
 
 # _fetch_league()
