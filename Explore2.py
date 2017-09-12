@@ -26,7 +26,7 @@ roster_map = {
     23: 'RB/WR/TE'
 }
 M_Eff = {}
-for week in range(1,14):
+for week in range(1,2):
     for team in [1,2,6,8,9,10,12,13,14,15,16,17] :
         print week, team
         if team in M_Eff:
@@ -34,7 +34,10 @@ for week in range(1,14):
                 break
         exp = EspnFflClient(223275).test(team,week)
         # print exp['boxscore']['teams'][0]['slots'][0]['player'].keys()
-        base = exp['boxscore']['teams'][1]
+        if exp['boxscore']['teams'][0]['teamId'] == team:
+            base = exp['boxscore']['teams'][0]
+        else:
+            base = exp['boxscore']['teams'][1]
         # print exp['boxscore']['teams'][0]['slots'][player]['player'].keys()
         # print base['slots'][10]['player']['eligibleSlotCategoryIds']
         possible = {}
@@ -93,9 +96,16 @@ for week in range(1,14):
 
 print M_Eff
 
+
+teams = {1:'Michael Koester', 2:"Zach Haywood", 6:"Johal Baez", 8:"Eric Begens", 9:"Benjamin Burnstine", 10:"Matt Goldman", 12:"Eric Wilson", 13:"Daniel Wossenu", 14:"Mohamed Somji", 15:"Andrew Frost", 16:"Joshua Bautz", 17:"Michael Goldman"}
+print 'THIS WEEK'
 for keys in M_Eff:
-    sum = 0
-    for keys2 in M_Eff[keys]:
-        sum +=M_Eff[keys][keys2]
-    sum = sum/13.0
-    print keys, str(sum)
+    print teams[keys] +': %.2f'%(sum(M_Eff[keys])*100)+ '%'
+
+#
+# for keys in M_Eff:
+#     sum = 0
+#     for keys2 in M_Eff[keys]:
+#         sum +=M_Eff[keys][keys2]
+#     sum = sum/13.0
+#     print keys, str(sum)
