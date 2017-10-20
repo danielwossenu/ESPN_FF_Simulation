@@ -2,14 +2,14 @@ import csv
 import numpy as np
 import operator
 import urllib2
-import FFScrap
-response = urllib2.urlopen("http://games.espn.com/ffl/schedule?leagueId=223275")
-source = response.read()
+# import FFScrap
+# response = urllib2.urlopen("http://games.espn.com/ffl/schedule?leagueId=223275")
+# source = response.read()
 # the first week to start simulating
-sim_start = 13
+sim_start = 7
 
 # number of simulations
-trials = 10000.0
+trials = 100000.0
 
 teams_ls = ["Daniel Wossenu", "Mohamed Somji", "eric begens", "Zach Haywood", "Eric Wilson", "Johal Baez", "andrew frost", "Joshua Bautz", "Benjamin Burnstine", "mike goldman", "Michael Koester", "Matt Goldman"]
 teams_ll = [['Daniel Wossenu'], ['Mohamed Somji'], ['eric begens'], ['Zach Haywood'], ['Eric Wilson'], ['Johal Baez'], ['andrew frost'], ['Joshua Bautz'], ['Benjamin Burnstine'], ['mike goldman'], ['Michael Koester'], ['Matt Goldman']]
@@ -21,7 +21,7 @@ for x in teams_ls:
     wins[x] = [0, [], 0, 0, 0]
 
 # read CSV file
-with open("C:\Users\Daniel\Google Drive\Programming\RandomProjects\FantasySimCSV.csv", 'rb') as f:
+with open("C:/Users/Daniel/Documents/GitHub/ESPN_FF_Simulation/2017_schedule.csv", 'rb') as f:
     reader = csv.reader(f)
     next(reader, None)
     mylist = list(reader)
@@ -31,9 +31,9 @@ with open("C:\Users\Daniel\Google Drive\Programming\RandomProjects\FantasySimCSV
 
 # Turn number strings to int in mylist for both game scores and the week number
 for game in mylist:
-    game[2] = int(game[2])
-    game[3] = int(game[3])
-    game[4] = int(game[4])
+    game[2] = float(game[2])
+    game[3] = float(game[3])
+    game[4] = float(game[4])
 
 # assign wins to each team in "wins" dictionary
 def assign_wins():
@@ -91,12 +91,14 @@ reset_wins()
 
 
 for sim in range (1,int(trials+1),1):
+    if sim%1000 == 0:
+        print sim
     for num, game in enumerate(mylist[(6*(sim_start-1)):]):
         #assign score from random number based on normal dist with mean and st dev
-        # mylist[53 + num][2] = int(np.random.normal(wins[game[0]][2], wins[game[0]][3]))
-        # mylist[53 + num][3] = int(np.random.normal(wins[game[1]][2], wins[game[1]][3]))
-        mylist[6*(sim_start-1) + num][2] = int(np.random.normal(90, 10))
-        mylist[6*(sim_start-1) + num][3] = int(np.random.normal(90, 10))
+        mylist[6*(sim_start-1) + num][2] = int(np.random.normal(wins[game[0]][2], wins[game[0]][3]))
+        mylist[6*(sim_start-1) + num][3] = int(np.random.normal(wins[game[1]][2], wins[game[1]][3]))
+        # mylist[6*(sim_start-1) + num][2] = int(np.random.normal(90, 10))
+        # mylist[6*(sim_start-1) + num][3] = int(np.random.normal(90, 10))
 
     assign_wins()
     calc_playoffs()

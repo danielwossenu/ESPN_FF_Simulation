@@ -26,7 +26,9 @@ roster_map = {
     23: 'RB/WR/TE'
 }
 M_Eff = {}
-for week in range(1,2):
+exp = EspnFflClient(223275)
+this_week = 6
+for week in range(this_week,this_week+1):
     for team in [1,2,6,8,9,10,12,13,14,15,16,17] :
         print week, team
         if team in M_Eff:
@@ -101,6 +103,9 @@ teams = {1:'Michael Koester', 2:"Zach Haywood", 6:"Johal Baez", 8:"Eric Begens",
 print 'THIS WEEK'
 for keys in M_Eff:
     print teams[keys] +': %.2f'%(sum(M_Eff[keys])*100)+ '%'
+
+for keys in M_Eff:
+    print teams[keys] +': %.2f'%(M_Eff[keys][this_week]*100)+ '%'
 
 #
 # for keys in M_Eff:
