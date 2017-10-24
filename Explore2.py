@@ -27,7 +27,7 @@ roster_map = {
 }
 M_Eff = {}
 exp = EspnFflClient(223275)
-this_week = 6
+this_week = 7
 for week in range(this_week,this_week+1):
     for team in [1,2,6,8,9,10,12,13,14,15,16,17] :
         print week, team
