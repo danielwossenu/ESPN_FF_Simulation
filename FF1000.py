@@ -6,7 +6,7 @@ import urllib2
 # response = urllib2.urlopen("http://games.espn.com/ffl/schedule?leagueId=223275")
 # source = response.read()
 # the first week to start simulating
-sim_start = 8
+sim_start = 10
 
 # number of simulations
 trials = 100000.0
@@ -21,7 +21,7 @@ for x in teams_ls:
     wins[x] = [0, [], 0, 0, 0]
 
 # read CSV file
-with open("C:/Users/Daniel/Documents/GitHub/ESPN_FF_Simulation/2017_schedule_2.csv", 'rb') as f:
+with open("C:/Users/Daniel/Documents/GitHub/ESPN_FF_Simulation/2017_schedule_3.csv", 'rb') as f:
     reader = csv.reader(f)
     next(reader, None)
     mylist = list(reader)
@@ -112,6 +112,6 @@ for sim in range (1,int(trials+1),1):
     #     print "a"
     playoffs = []
 for each in wins:
-    print each, ('%.2f' % (wins[each][4]*100))+"%"
+    print each+":", ('%.2f' % (wins[each][4]*100))+"%"
 
 # print wins
