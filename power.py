@@ -1,7 +1,7 @@
 from espnff import League
 
 leagueid = 223275
-year = 2017
+year = 2018
 leag = League(leagueid ,year)
 
 rankings = leag.power_rankings(9)

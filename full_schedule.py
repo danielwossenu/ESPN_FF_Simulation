@@ -1,41 +1,69 @@
-import csv
+from espnff import League
+import pickle
 import numpy as np
 import operator
-import urllib2
-# import FFScrap
-# response = urllib2.urlopen("http://games.espn.com/ffl/schedule?leagueId=223275")
-# source = response.read()
-# the first week to start simulating
+
+# league_api = League(223275, 2017)
+# with open('league2017.pkl', 'wb') as output:
+#     pickle.dump(league_api, output, pickle.HIGHEST_PROTOCOL)
+
+
+with open('league2018.pkl', 'rb') as input:
+     league = pickle.load(input)
+
+schedule = {}
+
+thru_week = 1
+
+team_id_to_owner = {}
+team_owner_to_id = {}
+
+for each in range(1,14):
+    schedule[each]={'games':[],'added':[]}
+for team in league.teams:
+    # print team.team_id
+    team_id_to_owner[team.team_id] = team.owner
+    team_owner_to_id[team.owner] = team.team_id
+    for week,opponent in enumerate(team.schedule):
+        # print week+1, team.team_id, opponent.team_id, team.scores[week], team.scores[week] - team.mov[week]
+        print week+1, team.owner, opponent.owner, team.scores[week], team.scores[week] - team.mov[week]
+
+        if team.team_id not in schedule[week+1]['added']:
+            if week+1 > thru_week:
+                schedule[week+1]['games'].append([team.team_id, opponent.team_id, 0, 0, float(week+1)])
+            else:
+                schedule[week+1]['games'].append([team.team_id, opponent.team_id, team.scores[week], team.scores[week] - team.mov[week], float(week+1)])
+            schedule[week+1]['added'].append(team.team_id)
+            schedule[week+1]['added'].append(opponent.team_id)
+
+
+print schedule
+mylist=[]
+for week in schedule:
+    for game in schedule[week]['games']:
+        mylist.append(game)
+
+
+
+
+
+
 sim_start = 10
 
 # number of simulations
-trials = 100000.0
+trials = 1000.0
 
 teams_ls = ["Daniel Wossenu", "Mohamed Somji", "eric begens", "Zach Haywood", "Eric Wilson", "Johal Baez", "andrew frost", "Joshua Bautz", "Benjamin Burnstine", "mike goldman", "Michael Koester", "Matt Goldman"]
-teams_ll = [['Daniel Wossenu'], ['Mohamed Somji'], ['eric begens'], ['Zach Haywood'], ['Eric Wilson'], ['Johal Baez'], ['andrew frost'], ['Joshua Bautz'], ['Benjamin Burnstine'], ['mike goldman'], ['Michael Koester'], ['Matt Goldman']]
 wins = dict()
 playoffs = []
 
 #initialize dictionary the value is (wins, [game scores], mean, stddev, playoffs %)
-for x in teams_ls:
+for x in schedule[1]['added']:
     wins[x] = [0, [], 0, 0, 0]
 
-# read CSV file
-with open("C:/Users/Daniel/Desktop/ESPN_FF_Simulation/2017_schedule_3.csv", 'rb') as f:
-    reader = csv.reader(f)
-    next(reader, None)
-    mylist = list(reader)
-
-# mylist = FFScrap.get_schedule(source)
 
 
-# Turn number strings to int in mylist for both game scores and the week number
-for game in mylist:
-    game[2] = float(game[2])
-    game[3] = float(game[3])
-    game[4] = float(game[4])
 
-# assign wins to each team in "wins" dictionary
 def assign_wins():
     for game in mylist:
         if game[2] != 0:
@@ -112,6 +140,4 @@ for sim in range (1,int(trials+1),1):
     #     print "a"
     playoffs = []
 for each in wins:
-    print each+":", ('%.2f' % (wins[each][4]*100))+"%"
-
-# print wins
+    print str(team_id_to_owner[each])+":", ('%.2f' % (wins[each][4]*100))+"%"
