@@ -43,10 +43,11 @@ def _fetch_league():
 
 
 class EspnFflClient:
-    def __init__(self, league_id):
+    def __init__(self, league_id, year):
         self.leagueId = league_id
         self.ENDPOINT = 'http://games.espn.com/ffl/api/v2/'
         self.RAND = '00921504334023'
+        self.year = year
 
     def get_recent_activity(self, count=20):
         url = self.ENDPOINT + 'recentActivity?' + '?leagueId=' + str(self.leagueId) + '&count=' + str(
@@ -62,7 +63,7 @@ class EspnFflClient:
 
     def test(self,team,week):
         # url = self.ENDPOINT + 'scoreboard' + '?leagueId=' + str(self.leagueId) +'&scoringPeriodId=13'+'&seasonId=2016'+'&rand=' + self.RAND
-        url = self.ENDPOINT + 'boxscore?leagueId=223275&teamId='+str(team)+'&scoringPeriodId='+str(week)+'&seasonId=2018' + '&rand=' + self.RAND
+        url = self.ENDPOINT + 'boxscore?leagueId=223275&teamId='+str(team)+'&scoringPeriodId='+str(week)+'&seasonId={}'.format(self.year) + '&rand=' + self.RAND
         r = requests.get(url)
         return r.json()
 
@@ -71,10 +72,10 @@ class EspnFflClient:
     #     r = requests.get(url)
     #     return r.json()
 
-client = EspnFflClient(223275)
-# print(client.get_recent_activity(20))
-# print(client.get_player_info())
-print client.test(13,13)
+# client = EspnFflClient(223275)
+# # print(client.get_recent_activity(20))
+# # print(client.get_player_info())
+# print client.test(13,13)
 
 
 # _fetch_league()

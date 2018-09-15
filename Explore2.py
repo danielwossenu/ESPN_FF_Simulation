@@ -101,8 +101,8 @@ print M_Eff
 
 teams = {1:'Michael Koester', 2:"Zach Haywood", 6:"Johal Baez", 8:"Eric Begens", 9:"Benjamin Burnstine", 10:"Matt Goldman", 12:"Eric Wilson", 13:"Daniel Wossenu", 14:"Mohamed Somji", 15:"Andrew Frost", 16:"Joshua Bautz", 17:"Michael Goldman"}
 print 'THIS WEEK'
-for keys in M_Eff:
-    print teams[keys] +': %.2f'%(sum(M_Eff[keys])*100)+ '%'
+# for keys in M_Eff:
+#     print teams[keys] +': %.2f'%(sum(M_Eff[keys])*100)+ '%'
 
 for keys in M_Eff:
     print teams[keys] +': %.2f'%(M_Eff[keys][this_week]*100)+ '%'
